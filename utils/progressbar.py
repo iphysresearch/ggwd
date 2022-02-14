@@ -132,10 +132,7 @@ class ProgressBar:
         Returns: Time elapsed since progress bar was instantiated.
         """
 
-        if self.start_time is not None:
-            return time.time() - self.start_time
-        else:
-            return None
+        return time.time() - self.start_time if self.start_time is not None else None
 
     # -------------------------------------------------------------------------
 
@@ -184,18 +181,12 @@ class ProgressBar:
 
         # Get the expected time of arrival (ETA) as a proper string
         eta = self.get_eta(percent)
-        if eta is None:
-            eta = '?'
-        else:
-            eta = '{:.2f}'.format(eta)
-
+        eta = '?' if eta is None else '{:.2f}'.format(eta)
         # Construct the actual progress bar string
         out = "[{0}] {1:>3}% ({2:>{3}}/{4:>{3}}) | Elapsed: {5} | ETA: {6}"
-        progressbar = out.format(bar + spaces, round(percent * 100),
+        return out.format(bar + spaces, round(percent * 100),
                                  index, len(str(self.max_value)),
                                  self.max_value, elapsed_time, eta)
-
-        return progressbar
 
     # -------------------------------------------------------------------------
 

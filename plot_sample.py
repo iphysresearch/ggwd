@@ -2,6 +2,7 @@
 Plot the results produced by the generate_sample.py script.
 """
 
+
 # -----------------------------------------------------------------------------
 # IMPORTS
 # -----------------------------------------------------------------------------
@@ -101,7 +102,7 @@ if __name__ == '__main__':
     # -------------------------------------------------------------------------
 
     print('Plotting sample...', end=' ')
-    
+
     # Select the sample (i.e., the row from the data frame of samples)
     try:
         sample = df.loc[sample_id]
@@ -131,11 +132,7 @@ if __name__ == '__main__':
 
     # If the sample has an injection, we need a second y-axis to plot the
     # pure (i.e., unwhitened) detector signals
-    if has_injection:
-        axes2 = [ax.twinx() for ax in axes1]
-    else:
-        axes2 = None
-
+    axes2 = [ax.twinx() for ax in axes1] if has_injection else None
     # Plot the strains for H1 and L1
     for i, (det_name, det_string) in enumerate([('H1', 'h1_strain'),
                                                 ('L1', 'l1_strain')]):

@@ -84,9 +84,7 @@ class WaveformParameterGenerator(object):
             position in the sky, ...).
         """
         values = apply_transforms(self.pval.rvs(), self.trans)[0]
-        result = dict(zip(self.var_args, values))
-
-        return result
+        return dict(zip(self.var_args, values))
 
 
 # -----------------------------------------------------------------------------

@@ -78,7 +78,7 @@ def read_json_config(file_path):
     if not os.path.exists(file_path):
         raise IOError('Specified configuration file does not exist: '
                       '{}'.format(file_path))
-    
+
     # Open the config while and load the JSON contents as a dict
     with open(file_path, 'r') as json_file:
         config = json.load(json_file)
@@ -88,10 +88,8 @@ def read_json_config(file_path):
                      'waveform_params_file_name', 'max_runtime',
                      'n_injection_samples', 'n_noise_samples', 'n_processes',
                      'random_seed', 'output_file_name'}
-    
-    # Make sure no required keys are missing
-    missing_keys = required_keys.difference(set(config.keys()))
-    if missing_keys:
+
+    if missing_keys := required_keys.difference(set(config.keys())):
         raise KeyError('Missing required key(s) in JSON configuration file: '
                        '{}'.format(', '.join(list(missing_keys))))
 

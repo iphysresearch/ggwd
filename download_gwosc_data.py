@@ -2,6 +2,7 @@
 This script simplifies downloading raw LIGO data from GWOSC.
 """
 
+
 # -----------------------------------------------------------------------------
 # IMPORTS
 # -----------------------------------------------------------------------------
@@ -94,11 +95,10 @@ if __name__ == '__main__':
     # Loop over specified detectors and download the HDF files
     # -------------------------------------------------------------------------
 
-    if detectors == 'both':
-        detectors = ['H1', 'L1']
-    else:
-        detectors = [detectors]
-
+    detectors = ['H1', 'L1'] if detectors == 'both' else [detectors]
+    # Construct the URL to the JSON file containing the links to all files
+    urlformat = 'https://gw-openscience.org/archive/links/' \
+        '{0}/{1}/{2}/{3}/json/'
     for detector in detectors:
 
         # Define the directory into which we would download the data for
@@ -107,9 +107,6 @@ if __name__ == '__main__':
         if not dry and not os.path.exists(directory):
             os.mkdir(directory)
 
-        # Construct the URL to the JSON file containing the links to all files
-        urlformat = 'https://gw-openscience.org/archive/links/' \
-            '{0}/{1}/{2}/{3}/json/'
         url = urlformat.format(observation_run, detector, gps_start_time,
                                gps_end_time)
 

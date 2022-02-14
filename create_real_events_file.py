@@ -4,6 +4,7 @@ containing the pre-processed (i.e., re-sampled, whitened and
 band-passed) data for all merger events observed so far.
 """
 
+
 # -----------------------------------------------------------------------------
 # IMPORTS
 # -----------------------------------------------------------------------------
@@ -85,7 +86,7 @@ if __name__ == '__main__':
     for param in sorted(['original_sampling_rate', 'target_sampling_rate',
                          'whitening_segment_duration', 'bandpass_lower',
                          'bandpass_upper', 'whitening_max_filter_duration']):
-        print('-- {:32}'.format(param + ':'), static_arguments[param])
+        print('-- {:32}'.format(f'{param}:'), static_arguments[param])
     print('')
 
     # -------------------------------------------------------------------------
@@ -136,7 +137,7 @@ if __name__ == '__main__':
                 TimeSeries(initial_array=strain[det][::resampling_factor],
                            delta_t=1.0 / target_sampling_rate,
                            epoch=strain[det].start_time)
-        
+
         print('Done!')
 
         # ---------------------------------------------------------------------

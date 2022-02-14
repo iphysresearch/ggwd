@@ -151,7 +151,7 @@ class SampleFile:
                  iteritems(self.data['static_arguments'])}
 
             # Read in group containing injection samples
-            self.data['injection_samples'] = dict()
+            self.data['injection_samples'] = {}
             for key in ('event_time', 'h1_strain', 'l1_strain'):
                 try:
                     self.data['injection_samples'][key] = \
@@ -160,7 +160,7 @@ class SampleFile:
                     self.data['injection_samples'][key] = np.array(None)
 
             # Read in group containing noise samples
-            self.data['noise_samples'] = dict()
+            self.data['noise_samples'] = {}
             for key in ('event_time', 'h1_strain', 'l1_strain'):
                 try:
                     self.data['noise_samples'][key] = \
@@ -169,7 +169,7 @@ class SampleFile:
                     self.data['noise_samples'][key] = np.array(None)
 
             # Read in injection parameters
-            self.data['injection_parameters'] = dict()
+            self.data['injection_parameters'] = {}
             for key in hdf_file['/injection_parameters'].keys():
                 try:
                     self.data['injection_parameters'][key] = \
@@ -357,12 +357,8 @@ class SampleFile:
         except KeyError:
             warn('\nNo key "event_time": Data frame is probably empty!')
 
-        # Either split into two data frames for injection and noise samples
-        if split_injections_noise:
-            df_injections = df[df.h1_signal.notnull()]
-            df_noise = df[~df.h1_signal.notnull()]
-            return df_injections, df_noise
-
-        # Or just return a single data frame containing both types of samples
-        else:
+        if not split_injections_noise:
             return df
+        df_injections = df[df.h1_signal.notnull()]
+        df_noise = df[~df.h1_signal.notnull()]
+        return df_injections, df_noise

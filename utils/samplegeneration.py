@@ -94,7 +94,7 @@ def generate_sample(static_arguments,
                                     low_freq_cutoff=f_lower)
 
         # Actually generate the noise using the PSD and LALSimulation
-        noise = dict()
+        noise = {}
         for i, det in enumerate(('H1', 'L1')):
 
             # Compute the length of the noise sample in time steps
@@ -112,7 +112,6 @@ def generate_sample(static_arguments,
             # noinspection PyProtectedMember
             noise[det]._epoch = LIGOTimeGPS(start_time)
 
-    # Otherwise we select the noise from the corresponding HDF file
     else:
 
         kwargs = dict(hdf_file_paths=hdf_file_paths,
@@ -135,8 +134,6 @@ def generate_sample(static_arguments,
         injection_parameters = None
         strain = noise
 
-    # Otherwise, we need to simulate a waveform for the given waveform_params
-    # and add it into the noise to create the strain
     else:
 
         # ---------------------------------------------------------------------
@@ -191,14 +188,10 @@ def generate_sample(static_arguments,
         injection_snr = waveform_params['injection_snr']
         scale_factor = 1.0 * injection_snr / nomf_snr
 
-        strain = {}
-        for det in ('H1', 'L1'):
-
-            # Add the simulated waveform into the noise, using a scaling
-            # factor to ensure that the resulting NOMF-SNR equals the chosen
-            # injection SNR
-            strain[det] = noise[det].add_into(scale_factor *
-                                              detector_signals[det])
+        strain = {
+            det: noise[det].add_into(scale_factor * detector_signals[det])
+            for det in ('H1', 'L1')
+        }
 
         # ---------------------------------------------------------------------
         # Store some information about the injection we just made

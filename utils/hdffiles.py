@@ -118,7 +118,7 @@ def get_strain_from_hdf_file(hdf_file_paths,
     sampling_factor = int(original_sampling_rate / target_sampling_rate)
 
     # Store the sample we have selected from the HDF files
-    sample = dict()
+    sample = {}
 
     # Loop over both detectors
     for detector in ('H1', 'L1'):
@@ -151,21 +151,16 @@ def get_strain_from_hdf_file(hdf_file_paths,
     if not as_pycbc_timeseries:
         return sample
 
-    # Otherwise we need to convert the numpy array to a time series first
     else:
 
-        # Initialize an empty dict for the time series results
-        timeseries = dict()
-
-        # Convert strain of both detectors to a TimeSeries object
-        for detector in ('H1', 'L1'):
-
-            timeseries[detector] = \
-                TimeSeries(initial_array=sample[detector],
-                           delta_t=1.0/target_sampling_rate,
-                           epoch=LIGOTimeGPS(gps_time - offset))
-
-        return timeseries
+        return {
+            detector: TimeSeries(
+                initial_array=sample[detector],
+                delta_t=1.0 / target_sampling_rate,
+                epoch=LIGOTimeGPS(gps_time - offset),
+            )
+            for detector in ('H1', 'L1')
+        }
 
 
 # -----------------------------------------------------------------------------
@@ -428,7 +423,7 @@ class NoiseTimeline:
         # ---------------------------------------------------------------------
 
         # Compute the minimum data quality
-        min_dq = sum([2**i for i in dq_bits])
+        min_dq = sum(2**i for i in dq_bits)
 
         # Perform the DQ check for H1
         environment['h1_dq_mask'] = environment['h1_dq_mask'] > min_dq
@@ -525,7 +520,7 @@ class NoiseTimeline:
         """
 
         # Keep track of the results, i.e., the paths to the HDF files
-        result = dict()
+        result = {}
 
         # Loop over all HDF files to find the ones containing the given time
         for hdf_file in self.hdf_files:
@@ -540,7 +535,7 @@ class NoiseTimeline:
                 result[hdf_file['detector']] = hdf_file['file_path']
 
             # If both files were found, we are done!
-            if 'H1' in result.keys() and 'L1' in result.keys():
+            if 'H1' in result and 'L1' in result:
                 return result
 
         # If we didn't both files, return None
